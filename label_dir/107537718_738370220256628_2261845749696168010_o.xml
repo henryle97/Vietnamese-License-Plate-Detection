@@ -1,0 +1,37 @@
+<annotation>
+    <folder>img_test</folder>
+    <filename>107537718_738370220256628_2261845749696168010_o.jpg</filename>
+    <path>/home/hisiter/working/text_mutex/CenterNet_custom/CENTER_MODEL/img_test/107537718_738370220256628_2261845749696168010_o.jpg</path>
+    <source>
+        <database>Unknown</database>
+    </source>
+    <size>
+        <width>540</width>
+        <height>960</height>
+        <depth>3</depth>
+    </size>
+    <segmented>0</segmented>
+    <object>
+        <name>corner</name>
+        <pose>Unspecified</pose>
+        <truncated>0</truncated>
+        <difficult>0</difficult>
+        <bndbox>
+            <xmin>150</xmin>
+            <ymin>458</ymin>
+            <xmax>156</xmax>
+            <ymax>464</ymax>
+        </bndbox>
+    </object>    <object>
+        <name>corner</name>
+        <pose>Unspecified</pose>
+        <truncated>0</truncated>
+        <difficult>0</difficult>
+        <bndbox>
+            <xmin>351</xmin>
+            <ymin>917</ymin>
+            <xmax>357</xmax>
+            <ymax>923</ymax>
+        </bndbox>
+    </object>
+</annotation>

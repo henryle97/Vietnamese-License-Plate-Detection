@@ -1,0 +1,15 @@
+<annotation>
+    <folder>img_test</folder>
+    <filename>117169444_606970666629064_3783400732276274819_n.jpg</filename>
+    <path>/home/hisiter/working/text_mutex/CenterNet_custom/CENTER_MODEL/img_test/117169444_606970666629064_3783400732276274819_n.jpg</path>
+    <source>
+        <database>Unknown</database>
+    </source>
+    <size>
+        <width>1533</width>
+        <height>2048</height>
+        <depth>3</depth>
+    </size>
+    <segmented>0</segmented>
+
+</annotation>

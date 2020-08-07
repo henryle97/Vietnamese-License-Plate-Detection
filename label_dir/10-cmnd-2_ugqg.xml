@@ -1,0 +1,15 @@
+<annotation>
+    <folder>img_test</folder>
+    <filename>10-cmnd-2_ugqg.jpg</filename>
+    <path>/home/hisiter/working/text_mutex/CenterNet_custom/CENTER_MODEL/img_test/10-cmnd-2_ugqg.jpg</path>
+    <source>
+        <database>Unknown</database>
+    </source>
+    <size>
+        <width>800</width>
+        <height>600</height>
+        <depth>3</depth>
+    </size>
+    <segmented>0</segmented>
+
+</annotation>
