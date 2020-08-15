@@ -21,11 +21,11 @@ class CENTER_MODEL(object):
         self.scale = 1.0
         self.threshold = 0.25
         self.num_classes = 1
-        self.K = 10
+        self.K = 20
         self.model = get_pose_net(num_layers=self.num_layers, heads=self.heads, head_conv=self.head_conv)
         self.model = load_model(self.model, weight_path)
-        # self.device = torch.device("cuda:1")
-        # self.model.cuda()
+        if torch.cuda.is_available():
+            self.model.cuda()
         self.model.eval()
 
     def detect_obj(self, img):
@@ -35,10 +35,9 @@ class CENTER_MODEL(object):
         :return:
         """
         image, meta = pre_process(img, self.scale)
-        # plt.imshow(image[0].permute(1,2,0))
-        # plt.show()
-        # image = image.cuda()
         with torch.no_grad():
+            if torch.cuda.is_available():
+                image = image.cuda()
             start = time.time()
             output = self.model(image)[-1]
             print(time.time() - start)
@@ -47,11 +46,9 @@ class CENTER_MODEL(object):
             dets = ctdet_decode(hm, reg=reg, K=self.K)
 
         dets = post_process(dets, meta)
-
         dets = [dets]
 
         results = merge_outputs(dets)
-        print(results)
 
         list_center = []
         list_center_label = []
@@ -62,14 +59,14 @@ class CENTER_MODEL(object):
                     list_center_label.append([[x_center, y_center], j])  # x, y ,label_id
                     list_center.append([x_center, y_center])
 
-        img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-        colors = {1:(137,22,140), 2:(205,79,57), 3:(205,102,0), 4:(70,103,25)}
+        img_draw = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+        colors = {1:(137,22,140)}
         for center in list_center_label:
-            img = cv2.circle(img, (center[0][0], center[0][1]), radius=10, color=colors[center[1]], thickness=2)
+            img_draw = cv2.circle(img_draw, (center[0][0], center[0][1]), radius=10, color=colors[center[1]], thickness=2)
 
-        plt.imshow(img)
+        plt.imshow(img_draw)
         plt.show()
-        print(len(list_center))
+
         if (len(list_center) == 4):
             points = self.order_points(np.array(list_center[:4]))
         else:
@@ -88,6 +85,8 @@ class CENTER_MODEL(object):
         """
         image, meta = pre_process(img, self.scale)
         with torch.no_grad():
+            if torch.cuda.is_available():
+                image = image.cuda()
             output = self.model(image)[-1]
             hm = output['hm'].sigmoid_()
             reg = output['reg']
@@ -141,8 +140,8 @@ class CENTER_MODEL(object):
         return warped
 
 if __name__ == "__main__":
-    model = CENTER_MODEL(weight_path="weights/model_plate_ep500.pth")
-    img_path = "img_test/plate_3.jpg"
+    model = CENTER_MODEL(weight_path="weights/model_last_check.pth")
+    img_path = "img_test/20831.jpg"
     img = cv2.imread(img_path)
 
     model.detect_obj(img)

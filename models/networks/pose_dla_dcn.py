@@ -1,16 +1,12 @@
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
-import time
-import uuid
-import os
-import glob
+
 import math
 import logging
 import numpy as np
 from os.path import join
 import cv2
-import argparse
 import torch
 from torch import nn
 import torch.nn.functional as F
@@ -749,8 +745,7 @@ num_layers = 34
 down_ratio = 4
 scale = 1.0
 num_classes = 1
-max_per_image = 10
-
+max_per_image = 20
 
 heads = {'hm': num_classes, 'reg': 2}
 mean = np.array([0.472459, 0.475080, 0.482652],
