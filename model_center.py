@@ -11,18 +11,14 @@ import cv2
 import numpy as np
 import time
 import matplotlib.pyplot as plt
-
+import params
 class CENTER_MODEL(object):
     def __init__(self, weight_path=""):
-        self.num_layers = 34
-        self.list_label = ['p']
-        self.heads = {'hm': len(self.list_label), 'reg': 2}
-        self.head_conv = 256
         self.scale = 1.0
         self.threshold = 0.25
-        self.num_classes = 1
-        self.K = 20
-        self.model = get_pose_net(num_layers=self.num_layers, heads=self.heads, head_conv=self.head_conv)
+        self.num_classes = params.num_classes
+        self.K = params.max_per_image
+        self.model = get_pose_net(num_layers=params.num_layers, heads=params.heads, head_conv=params.head_conv)
         self.model = load_model(self.model, weight_path)
         if torch.cuda.is_available():
             self.model.cuda()
@@ -141,7 +137,7 @@ class CENTER_MODEL(object):
 
 if __name__ == "__main__":
     model = CENTER_MODEL(weight_path="weights/model_last_check.pth")
-    img_path = "img_test/20831.jpg"
+    img_path = "img_test/0513_06538_b.jpg"
     img = cv2.imread(img_path)
 
     model.detect_obj(img)

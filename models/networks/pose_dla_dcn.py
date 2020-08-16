@@ -13,6 +13,19 @@ import torch.nn.functional as F
 import torch.utils.model_zoo as model_zoo
 
 from models.networks.DCNv2.dcn_v2 import DCN
+import params
+
+head_conv = params.head_conv
+num_layers = params.num_layers
+down_ratio = params.num_layers
+scale = params.scale
+num_classes = params.num_classes
+max_per_image = params.max_per_image
+
+heads = params.heads
+mean = params.mean
+std = params.std
+
 
 BN_MOMENTUM = 0.1
 logger = logging.getLogger(__name__)
@@ -740,15 +753,4 @@ def post_process(dets, meta, scale=1):
         dets[0][j][:, :2] /= scale      # x_c, y_c
     return dets[0]
 
-head_conv = 256
-num_layers = 34
-down_ratio = 4
-scale = 1.0
-num_classes = 1
-max_per_image = 20
 
-heads = {'hm': num_classes, 'reg': 2}
-mean = np.array([0.472459, 0.475080, 0.482652],
-                dtype=np.float32).reshape((1, 1, 3))
-std = np.array([0.255084, 0.254665, 0.257073],
-               dtype=np.float32).reshape((1, 1, 3))
