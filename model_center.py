@@ -54,7 +54,7 @@ class CENTER_MODEL(object):
                     x_center, y_center = max(int(bbox[0]), 0), max(0, int(bbox[1]))
                     list_center_label.append([[x_center, y_center], j])  # x, y ,label_id
                     list_center.append([x_center, y_center])
-
+        print(list_center)
         img_draw = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
         colors = {1:(137,22,140)}
         for center in list_center_label:

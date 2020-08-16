@@ -17,7 +17,7 @@ import params
 
 head_conv = params.head_conv
 num_layers = params.num_layers
-down_ratio = params.num_layers
+down_ratio = params.down_ratio
 scale = params.scale
 num_classes = params.num_classes
 max_per_image = params.max_per_image
@@ -25,7 +25,6 @@ max_per_image = params.max_per_image
 heads = params.heads
 mean = params.mean
 std = params.std
-
 
 BN_MOMENTUM = 0.1
 logger = logging.getLogger(__name__)
@@ -752,5 +751,6 @@ def post_process(dets, meta, scale=1):
         dets[0][j] = np.array(dets[0][j], dtype=np.float32).reshape(-1, 3)  # [0-3: coord, 4:score, 5:cls]
         dets[0][j][:, :2] /= scale      # x_c, y_c
     return dets[0]
+
 
 
