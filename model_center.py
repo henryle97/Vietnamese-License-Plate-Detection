@@ -2,6 +2,8 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
+import glob
+
 import torch
 
 from models.networks.pose_dla_dcn import get_pose_net, load_model, pre_process, ctdet_decode, post_process, \
@@ -47,21 +49,21 @@ class CENTER_MODEL(object):
         results = merge_outputs(dets)
 
         list_center = []
-        list_center_label = []
+        # list_center_label = []
         for j in range(1, self.num_classes + 1):
             for bbox in results[j]:
                 if bbox[2] >= self.threshold:
                     x_center, y_center = max(int(bbox[0]), 0), max(0, int(bbox[1]))
-                    list_center_label.append([[x_center, y_center], j])  # x, y ,label_id
+                    # list_center_label.append([[x_center, y_center], j])  # x, y ,label_id
                     list_center.append([x_center, y_center])
-        print(list_center)
-        img_draw = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-        colors = {1:(137,22,140)}
-        for center in list_center_label:
-            img_draw = cv2.circle(img_draw, (center[0][0], center[0][1]), radius=10, color=colors[center[1]], thickness=2)
+        # print(list_center)
+        # img_draw = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+        # colors = {1:(137,22,140)}
+        # for center in list_center_label:
+        #     img_draw = cv2.circle(img_draw, (center[0][0], center[0][1]), radius=1, color=colors[center[1]], thickness=2)
 
-        plt.imshow(img_draw)
-        plt.show()
+        # plt.imshow(img_draw)
+        # plt.show()
 
         if (len(list_center) == 4):
             points = self.order_points(np.array(list_center[:4]))
@@ -70,38 +72,9 @@ class CENTER_MODEL(object):
             return None
 
         img_aligh = self.align(img, points)
-        plt.imshow(img_aligh)
-        plt.show()
-
-    def predict_box(self, img):
-        """
-
-        :param img: cv2 image
-        :return:
-        """
-        image, meta = pre_process(img, self.scale)
-        with torch.no_grad():
-            if torch.cuda.is_available():
-                image = image.cuda()
-            output = self.model(image)[-1]
-            hm = output['hm'].sigmoid_()
-            reg = output['reg']
-            dets = ctdet_decode(hm, reg=reg, K=self.K)
-
-        dets = post_process(dets, meta)
-        dets = [dets]
-        results = merge_outputs(dets)
-
-        list_center = []
-        list_center_label = []
-        for j in range(1, self.num_classes + 1):
-            for bbox in results[j]:
-                if bbox[2] >= self.threshold:
-                    x_center, y_center = max(int(bbox[0]), 0), max(0, int(bbox[1]))
-                    list_center_label.append([[x_center, y_center], j])  # x, y ,label_id
-                    list_center.append([x_center, y_center])
-
-        return list_center_label
+        # plt.imshow(img_aligh)
+        # plt.show()
+        return img_aligh
 
 
     def order_points(self, pts):
@@ -136,10 +109,11 @@ class CENTER_MODEL(object):
         return warped
 
 if __name__ == "__main__":
-    model = CENTER_MODEL(weight_path="weights/model_last_check.pth")
-    img_path = "img_test/0513_06538_b.jpg"
-    img = cv2.imread(img_path)
-
-    model.detect_obj(img)
+    model = CENTER_MODEL(weight_path="weights/model_best.pth")
+    paths = glob.glob("img_test/*")
+    for path in paths:
+    #img_path = "img_test/511.jpg"
+        img = cv2.imread(path)
+        model.detect_obj(img)
 
 
